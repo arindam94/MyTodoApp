@@ -6,6 +6,10 @@ export const useTodoViewModel = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
+    useEffect(() => {
+        loadTodos();
+    }, []);
+
     const loadTodos = async () => {
         const storeTodos = await TodoStorage.getTodos();
         setTodos(storeTodos);

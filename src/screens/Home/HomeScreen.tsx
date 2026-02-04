@@ -1,21 +1,41 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import {
   View,
   FlatList,
   ActivityIndicator,
   StyleSheet,
   Text,
+  TouchableOpacity
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useTodoViewModel } from '../../stores/useTodoViewModel';
 import { TodoItem } from '../../components/todo/TodoItem';
 
 export default function HomeScreen() {
+
+    const navigation = useNavigation();
+
   const {
     todos,
     isLoading,
     toggleTodos,
     deleteToDos,
+    addTodo,
   } = useTodoViewModel();
+
+  // 🔹 Toolbar button
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => addTodo('New Todo')}
+        >
+          <Text style={styles.addText}>＋</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, addTodo]);
 
   if (isLoading) {
     return (
@@ -64,5 +84,12 @@ const styles = StyleSheet.create({
     marginTop: 40,
     fontSize: 16,
     color: '#666',
+  },
+  addButton: {
+    marginRight: 16,
+  },
+  addText: {
+    fontSize: 26,
+    fontWeight: '600',
   },
 });
